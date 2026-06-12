@@ -128,4 +128,3 @@ if (!UserConditions.checked) {
     "true"
   );
 }
-

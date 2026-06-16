@@ -45,7 +45,7 @@ function enleverErreurs() {
 // Validation du formulaire
 function validate() {
   enleverErreurs();
-
+  //prenom, nom, email, date de naissance, nombre, ville choisie, conditions générales
   var first = document.getElementById("first");
   var last = document.getElementById("last");
   var email = document.getElementById("email");
@@ -55,40 +55,40 @@ function validate() {
   var locations = document.querySelectorAll("input[name='location']");
 
   var valide = true;
-
-  if (first.value.length < 2) {
+  //Validation du prénom
+  if (first.value.trim().length < 2) {
     afficherErreur(first, "Le prénom doit contenir au moins 2 caractères.");
     valide = false;
   }
-
-  if (last.value.length < 2) {
+  //Validation du nom
+  if (last.value.trim().length < 2) {
     afficherErreur(last, "Le nom doit contenir au moins 2 caractères.");
     valide = false;
   }
-
-  if (email.value === "" || !email.value.includes("@")) {
+  //Validation de l'email
+  if (email.value.trim() === "" || !email.value.trim().includes("@")) {
     afficherErreur(email, "Veuillez entrer un email valide.");
     valide = false;
   }
-
+  //Validation de la date de naissance
   if (birthdate.value === "") {
     afficherErreur(birthdate, "Veuillez entrer une date de naissance.");
     valide = false;
   }
-
+  //Validation du nombre de tournois
   if (quantity.value === "" || quantity.value < 0) {
     afficherErreur(quantity, "Veuillez entrer un nombre valide.");
     valide = false;
   }
 
   var villeChoisie = false;
-
+ 
   locations.forEach(function (location) {
     if (location.checked) {
       villeChoisie = true;
     }
   });
-
+  
   if (villeChoisie === false) {
     afficherErreur(locations[0], "Veuillez choisir une ville.");
     valide = false;
@@ -100,18 +100,22 @@ function validate() {
   }
 
   if (valide === true) {
-    modal.innerHTML = `
-      <div class="content">
-        <span class="close" onclick="location.reload()">×</span>
-        <div class="modal-body">
-          <p style="color:white; text-align:center; font-size:24px; margin-top:200px;">
-            Merci ! Votre réservation a bien été envoyée.
-          </p>
-          <button class="btn-submit" onclick="location.reload()">Fermer</button>
-        </div>
-      </div>
-    `;
-  }
+  form.style.display = "none";
+
+  document.querySelector(".modal-body").innerHTML = `
+    <div style="text-align:center; padding-top:150px;">
+      <p>Merci! Votre réservation a bien été reçue.</p>
+
+      <button
+        class="btn-submit"
+        type="button"
+        onclick="location.reload()"
+      >
+        Fermer
+      </button>
+    </div>
+  `;
+}
 
   return false;
 }

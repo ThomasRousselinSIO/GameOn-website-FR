@@ -1,130 +1,117 @@
+// Menu mobile
 function editNav() {
-  var x = document.getElementById("myTopnav");
-  if (x.className === "topnav") {
-    x.className += " responsive";
+  var nav = document.getElementById("myTopnav");
+
+  if (nav.className === "topnav") {
+    nav.className += " responsive";
   } else {
-    x.className = "topnav";
+    nav.className = "topnav";
   }
 }
 
-// DOM Elements
-const modalbg = document.querySelector(".bground");
-const modalBtn = document.querySelectorAll(".modal-btn");
-const formData = document.querySelectorAll(".formData");
+// Ouverture / fermeture modale
+var modal = document.querySelector(".bground");
+var modalBtn = document.querySelectorAll(".modal-btn");
+var closeBtn = document.querySelector(".close");
+var form = document.querySelector("form");
 
-// launch modal event
-modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
-
-// close modal event
-const closeBtn = document.querySelector(".close");
-closeBtn.addEventListener("click", closeModal);
-
-
-// launch modal form
-function launchModal() {
-  modalbg.style.display = "block";
-}
-
-// close modal form
-function closeModal() {
-  modalbg.style.display = "none";
-}
-
-//initialisation des variables pour la validation du formulaire
-
-const firstName = document.getElementById("prénom");
-const lastName = document.getElementById("nom");
-const email = document.getElementById("email");
-const birthdate = document.getElementById("anniversaire");
-const competitionNumber = document.getElementById("concours");
-const location = document.getElementById("Ville");
-const UserConditions = document.getElementById("CGU");
-
-//limitation du texte à 2 caractères pour les champs prénom et nom
-
-firstName.value.length >= 2 && lastName.value.length >= 2
-
-//validation du champ prénom
-if (firstName.value === "") {
-  firstName.parentElement.setAttribute(
-    "data-error",
-    "Veuillez renseigner votre prénom"
-  );
-  firstName.parentElement.setAttribute("data-error-visible", "true");
-}
-
-//validation du champ nom
-
-if (lastName.value === "") {
-  lastName.parentElement.setAttribute(
-    "data-error",
-    "Veuillez renseigner votre nom"
-  );
-  lastName.parentElement.setAttribute("data-error-visible", "true");
-}
-
-//validation de l'email
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-
-//validation du champ birthdate
-if (birthdate.value === "") {
-  birthdate.parentElement.setAttribute(
-    "data-error",
-    "Veuillez renseigner votre date de naissance"
-  );
-  birthdate.parentElement.setAttribute("data-error-visible", "true");
-}
-
-const competitionNumber = document.getElementById("quantity");
-
-if (competitionNumber.value === "" || isNaN(competitionNumber.value)) {
-  competitionNumber.parentElement.setAttribute(
-    "data-error",
-    "Veuillez entrer un nombre valide"
-  );
-  competitionNumber.parentElement.setAttribute("data-error-visible", "true");
-}
-
-//validation du champ location
-const locations = document.querySelectorAll(
-  'input[name="location"]'
-);
-
-let citySelected = false;
-
-// Vérification si une ville est sélectionnée
-locations.forEach((location) => {
-  if (location.checked) {
-    citySelected = true;
-  }
+modalBtn.forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    modal.style.display = "block";
+  });
 });
 
-if (!citySelected) {
-  document
-    .querySelector(".location-container")
-    .setAttribute(
-      "data-error",
-      "Veuillez sélectionner une ville"
-    );
+closeBtn.addEventListener("click", function () {
+  modal.style.display = "none";
+});
 
-  document
-    .querySelector(".location-container")
-    .setAttribute("data-error-visible", "true");
+// Afficher une erreur
+function afficherErreur(input, message) {
+  var formData = input.parentElement;
+  formData.setAttribute("data-error", message);
+  formData.setAttribute("data-error-visible", "true");
 }
 
+// Enlever les erreurs
+function enleverErreurs() {
+  var erreurs = document.querySelectorAll(".formData");
 
-//validation du champ CGU
-const UserConditions = document.getElementById("checkbox1");
+  erreurs.forEach(function (erreur) {
+    erreur.removeAttribute("data-error");
+    erreur.removeAttribute("data-error-visible");
+  });
+}
 
-if (!UserConditions.checked) {
-  UserConditions.parentElement.setAttribute(
-    "data-error",
-    "Vous devez accepter les conditions d'utilisation"
-  );
+// Validation du formulaire
+function validate() {
+  enleverErreurs();
 
-  UserConditions.parentElement.setAttribute(
-    "data-error-visible",
-    "true"
-  );
+  var first = document.getElementById("first");
+  var last = document.getElementById("last");
+  var email = document.getElementById("email");
+  var birthdate = document.getElementById("birthdate");
+  var quantity = document.getElementById("quantity");
+  var checkbox1 = document.getElementById("checkbox1");
+  var locations = document.querySelectorAll("input[name='location']");
+
+  var valide = true;
+
+  if (first.value.length < 2) {
+    afficherErreur(first, "Le prénom doit contenir au moins 2 caractères.");
+    valide = false;
+  }
+
+  if (last.value.length < 2) {
+    afficherErreur(last, "Le nom doit contenir au moins 2 caractères.");
+    valide = false;
+  }
+
+  if (email.value === "" || !email.value.includes("@")) {
+    afficherErreur(email, "Veuillez entrer un email valide.");
+    valide = false;
+  }
+
+  if (birthdate.value === "") {
+    afficherErreur(birthdate, "Veuillez entrer une date de naissance.");
+    valide = false;
+  }
+
+  if (quantity.value === "" || quantity.value < 0) {
+    afficherErreur(quantity, "Veuillez entrer un nombre valide.");
+    valide = false;
+  }
+
+  var villeChoisie = false;
+
+  locations.forEach(function (location) {
+    if (location.checked) {
+      villeChoisie = true;
+    }
+  });
+
+  if (villeChoisie === false) {
+    afficherErreur(locations[0], "Veuillez choisir une ville.");
+    valide = false;
+  }
+
+  if (checkbox1.checked === false) {
+    afficherErreur(checkbox1, "Vous devez accepter les conditions.");
+    valide = false;
+  }
+
+  if (valide === true) {
+    modal.innerHTML = `
+      <div class="content">
+        <span class="close" onclick="location.reload()">×</span>
+        <div class="modal-body">
+          <p style="color:white; text-align:center; font-size:24px; margin-top:200px;">
+            Merci ! Votre réservation a bien été envoyée.
+          </p>
+          <button class="btn-submit" onclick="location.reload()">Fermer</button>
+        </div>
+      </div>
+    `;
+  }
+
+  return false;
 }

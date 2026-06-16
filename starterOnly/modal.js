@@ -26,25 +26,25 @@ closeBtn.addEventListener("click", function () {
 });
 
 // Afficher une erreur
-function afficherErreur(input, message) {
+function showError(input, message) {
   var formData = input.parentElement;
   formData.setAttribute("data-error", message);
   formData.setAttribute("data-error-visible", "true");
 }
 
 // Enlever les erreurs
-function enleverErreurs() {
-  var erreurs = document.querySelectorAll(".formData");
+function delError() {
+  var error = document.querySelectorAll(".formData");
 
-  erreurs.forEach(function (erreur) {
-    erreur.removeAttribute("data-error");
-    erreur.removeAttribute("data-error-visible");
+  error.forEach(function (error) {
+    error.removeAttribute("data-error");
+    error.removeAttribute("data-error-visible");
   });
 }
 
 // Validation du formulaire
 function validate() {
-  enleverErreurs();
+  delError();
   //prenom, nom, email, date de naissance, nombre, ville choisie, conditions générales
   var first = document.getElementById("first");
   var last = document.getElementById("last");
@@ -54,52 +54,52 @@ function validate() {
   var checkbox1 = document.getElementById("checkbox1");
   var locations = document.querySelectorAll("input[name='location']");
 
-  var valide = true;
+  var validate = true;
   //Validation du prénom
   if (first.value.trim().length < 2) {
-    afficherErreur(first, "Le prénom doit contenir au moins 2 caractères.");
-    valide = false;
+    showError(first, "Le prénom doit contenir au moins 2 caractères.");
+    validate = false;
   }
   //Validation du nom
   if (last.value.trim().length < 2) {
-    afficherErreur(last, "Le nom doit contenir au moins 2 caractères.");
-    valide = false;
+    showError(last, "Le nom doit contenir au moins 2 caractères.");
+    validate = false;
   }
   //Validation de l'email
   if (email.value.trim() === "" || !email.value.trim().includes("@")) {
-    afficherErreur(email, "Veuillez entrer un email valide.");
-    valide = false;
+    showError(email, "Veuillez entrer un email valide.");
+    validate = false;
   }
   //Validation de la date de naissance
   if (birthdate.value === "") {
-    afficherErreur(birthdate, "Veuillez entrer une date de naissance.");
-    valide = false;
+    showError(birthdate, "Veuillez entrer une date de naissance.");
+    validate = false;
   }
   //Validation du nombre de tournois
   if (quantity.value === "" || quantity.value < 0) {
-    afficherErreur(quantity, "Veuillez entrer un nombre valide.");
-    valide = false;
+    showError(quantity, "Veuillez entrer un nombre valide.");
+    validate = false;
   }
 
-  var villeChoisie = false;
+  var chosenCity = false;
  
   locations.forEach(function (location) {
     if (location.checked) {
-      villeChoisie = true;
+      chosenCity = true;
     }
   });
   
-  if (villeChoisie === false) {
-    afficherErreur(locations[0], "Veuillez choisir une ville.");
-    valide = false;
+  if (chosenCity === false) {
+    showError(locations[0], "Veuillez choisir une ville.");
+    validate = false;
   }
 
   if (checkbox1.checked === false) {
-    afficherErreur(checkbox1, "Vous devez accepter les conditions.");
-    valide = false;
+    showError(checkbox1, "Vous devez accepter les conditions.");
+    validate = false;
   }
 
-  if (valide === true) {
+  if (validate === true) {
   form.style.display = "none";
 
   document.querySelector(".modal-body").innerHTML = `

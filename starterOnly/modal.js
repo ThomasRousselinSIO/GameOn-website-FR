@@ -10,10 +10,10 @@ function editNav() {
 }
 
 // Ouverture / fermeture modale
-var modal = document.querySelector(".bground");
-var modalBtn = document.querySelectorAll(".modal-btn");
-var closeBtn = document.querySelector(".close");
-var form = document.querySelector("form");
+const modal = document.querySelector(".bground");
+const modalBtn = document.querySelectorAll(".modal-btn");
+const closeBtn = document.querySelector(".close");
+const form = document.querySelector("form");
 
 modalBtn.forEach(function (btn) {
   btn.addEventListener("click", function () {
@@ -43,19 +43,20 @@ function clearErrors() {
 }
 
 // Validation du formulaire
-function validate() {
+function validate(e) {
+  e.preventDefault();
   console.log("Validation en cours...");
-  clearErrors();
+  clearErrors();  
   //prenom, nom, email, date de naissance, nombre, ville choisie, conditions générales
-  var first = document.getElementById("first");
-  var last = document.getElementById("last");
-  var email = document.getElementById("email");
-  var birthdate = document.getElementById("birthdate");
-  var quantity = document.getElementById("quantity");
-  var checkbox1 = document.getElementById("checkbox1");
-  var locations = document.querySelectorAll("input[name='location']");
+  const first = document.getElementById("first");
+  const last = document.getElementById("last");
+  const email = document.getElementById("email");
+  const birthdate = document.getElementById("birthdate");
+  const quantity = document.getElementById("quantity");
+  const checkbox1 = document.getElementById("checkbox1");
+  const locations = document.querySelectorAll("input[name='location']");
 
-  var validate = true;
+  let validate = true;
   //Validation du prénom
   if (first.value.trim().length < 2) {
     showErrors(first, "Le prénom doit contenir au moins 2 caractères.");
@@ -82,7 +83,7 @@ function validate() {
     validate = false;
   }
 
-  var chosenCity = false;
+  let chosenCity = false;
  
   locations.forEach(function (location) {
     if (location.checked) {
@@ -96,7 +97,7 @@ function validate() {
   }
 
   if (checkbox1.checked === false) {
-    showErrors(checkbox1, "Vous devez accepter les conditions.");
+    showErrors(checkbox1, "Vous devez accepter les conditions d'utilisation.");
     validate = false;
   }
 
